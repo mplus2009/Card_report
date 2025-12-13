@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Méritos y Deméritos EMCC</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+    body {
+      background-color: #f5f7fa;
+      margin: 0;
+      padding: 16px;
+      color: #333;
+    }
+    h1 {
+      text-align: center;
+      color: #1a3a5f;
+      margin-bottom: 20px;
+    }
+    input[type="text"] {
+      width: 100%;
+      padding: 12px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      font-size: 16px;
+      margin-bottom: 16px;
+    }
+    button {
+      width: 100%;
+      padding: 12px;
+      background-color: #1a3a5f;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-size: 16px;
+      cursor: pointer;
+      margin-bottom: 16px;
+    }
+    button:hover {
+      background-color: #2c5282;
+    }
+    .item {
+      background: white;
+      border-radius: 8px;
+      padding: 12px;
+      margin-bottom: 12px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    .item h3 {
+      margin: 0 0 8px 0;
+      color: #2d3748;
+    }
+    .item p {
+      margin: 4px 0;
+      color: #4a5568;
+    }
+    .category {
+      font-weight: bold;
+      color: #1a3a5f;
+      margin-top: 20px;
+      border-bottom: 1px solid #ddd;
+      padding-bottom: 4px;
+    }
+    #results {
+      margin-top: 20px;
+    }
+  </style>
+</head>
+<body>
+  <h1>🔍 Méritos y Deméritos EMCC</h1>
+  <input type="text" id="searchInput" placeholder="Buscar por nombre o siglas (ej: IO, AO, etc.)" />
+  <button onclick="showAll()">Ver todo</button>
+  <div id="results"></div>
+
+  <script>
+    // Base de datos con faltas y méritos
+    const data = [
+      // DEMÉRITOS
+      { type: "Demérito", category: "Formación Ética y Profesional", name: "No rendir cortesía", sigla: "NRC", g10: "1-3", g11_12: "4-8" },
+      { type: "Demérito", category: "Formación Ética y Profesional", name: "Saludar incorrectamente", sigla: "SI", g10: "1", g11_12: "1-3" },
+      { type: "Demérito", category: "Formación Ética y Profesional", name: "Permitir", sigla: "PER", g10: "2-5", g11_12: "6-11" },
+      { type: "Demérito", category: "Formación Ética y Profesional", name: "Tibieza", sigla: "TIB", g10: "1-2", g11_12: "3-5" },
+      { type: "Demérito", category: "Formación Ética y Profesional", name: "Ausente a formación", sigla: "AF", g10: "1-3", g11_12: "2-5" },
+      { type: "Demérito", category: "Formación Ética y Profesional", name: "Ausente al regreso de pase", sigla: "ARP", g10: "6-11", g11_12: "6-11" },
+      { type: "Demérito", category: "Formación Ética y Profesional", name: "Ausente al cuartel", sigla: "AC", g10: "1-3", g11_12: "1-5" },
+      { type: "Demérito", category: "Formación Ética y Profesional", name: "Mentir", sigla: "MEN", g10: "4-6", g11_12: "6-11" },
+      { type: "Demérito", category: "Formación Ética y Profesional", name: "Incumplir una orden", sigla: "IO", g10: "4-6", g11_12: "6-11" },
+      { type: "Demérito", category: "Formación Ética y Profesional", name: "Réplica", sigla: "REP", g10: "2-4", g11_12: "6-11" },
+      { type: "Demérito", category: "Formación Ética y Profesional", name: "Faltar el respeto", sigla: "FR", g10: "4-6", g11_12: "6-11" },
+      { type: "Demérito", category: "Formación Ética y Profesional", name: "Atribuciones indebidas", sigla: "ATR", g10: "1-3", g11_12: "1-5" },
+      { type: "Demérito", category: "Formación Ética y Profesional", name: "Estar peludo o pelado de forma no reglamentaria", sigla: "PEL", g10: "1-2", g11_12: "2-4" },
+      { type: "Demérito", category: "Formación Ética y Profesional", name: "Estar sin afeitar o mal afeitado", sigla: "AFE", g10: "1-2", g11_12: "2-4" },
+      { type: "Demérito", category: "Formación Ética y Profesional", name: "Recostarse a la pared, sentarse en lugares no apropiados", sigla: "REC", g10: "1-2", g11_12: "2-4" },
+      { type: "Demérito", category: "Formación Ética y Profesional", name: "Terminología inadecuada", sigla: "TER", g10: "1-2", g11_12: "2-4" },
+      { type: "Demérito", category: "Formación Ética y Profesional", name: "Palabras obscenas", sigla: "POB", g10: "4-6", g11_12: "6-10" },
+      { type: "Demérito", category: "Formación Ética y Profesional", name: "Reñir con un compañero", sigla: "REN", g10: "6-11", g11_12: "6-11" },
+      { type: "Demérito", category: "Formación Ética y Profesional", name: "Tener uñas largas o sucias", sigla: "UÑA", g10: "1", g11_12: "2" },
+      { type: "Demérito", category: "Formación Ética y Profesional", name: "Criticar la actuación o la orden de un superior", sigla: "CRS", g10: "2-4", g11_12: "5-8" },
+      { type: "Demérito", category: "Formación Ética y Profesional", name: "No presentarse al jefe después de cumplir una orden", sigla: "NPJ", g10: "2-4", g11_12: "5-8" },
+      { type: "Demérito", category: "Formación Ética y Profesional", name: "Presentarse incorrectamente ante el Jefe", sigla: "PIJ", g10: "1-3", g11_12: "4-6" },
+      { type: "Demérito", category: "Formación Ética y Profesional", name: "No rendir el parte correctamente", sigla: "NRP", g10: "1-2", g11_12: "2-4" },
+      { type: "Demérito", category: "Formación Ética y Profesional", name: "Incumplir el horario de la unidad", sigla: "IHU", g10: "2-5", g11_12: "2-5" },
+      { type: "Demérito", category: "Formación Ética y Profesional", name: "Arrojar basura fuera de los depósitos", sigla: "ARB", g10: "1-3", g11_12: "1-3" },
+      { type: "Demérito", category: "Formación Ética y Profesional", name: "Mantener las manos en los bolsillos", sigla: "MBP", g10: "1-2", g11_12: "2-4" },
+      { type: "Demérito", category: "Formación Ética y Profesional", name: "Desconocer lo que está reglamentado", sigla: "DRE", g10: "1-2", g11_12: "2-5" },
+      { type: "Demérito", category: "Formación Ética y Profesional", name: "Estar desnudo en el dormitorio", sigla: "EDD", g10: "1-3", g11_12: "3-5" },
+      { type: "Demérito", category: "Formación Ética y Profesional", name: "Hacer necesidades fisiológicas en lugares no dispuestos", sigla: "HNF", g10: "2-4", g11_12: "4-6" },
+      { type: "Demérito", category: "Formación Ética y Profesional", name: "Dirigirse de forma incorrecta a sus compañeros", sigla: "DIC", g10: "1-3", g11_12: "3-5" },
+      { type: "Demérito", category: "Formación Ética y Profesional", name: "No emplear el conducto reglamentario o emplearlo incorrectamente", sigla: "NCR", g10: "1-2", g11_12: "3-5" },
+      { type: "Demérito", category: "Formación Ética y Profesional", name: "Llegar a la EMCC en estado de embriaguez", sigla: "EBR", g10: "6-11", g11_12: "6-11" },
+      { type: "Demérito", category: "Formación Ética y Profesional", name: "Ingerir o introducir bebidas alcohólicas en la EMCC", sigla: "IBA", g10: "6-11", g11_12: "6-11" },
+      { type: "Demérito", category: "Formación Ética y Profesional", name: "Falsificar documentos", sigla: "FAL", g10: "6-11", g11_12: "6-11" },
+      { type: "Demérito", category: "Formación Ética y Profesional", name: "Realizar actos que atenten contra la moral y el prestigio de la EMCC", sigla: "AMA", g10: "6-11", g11_12: "6-11" },
+      { type: "Demérito", category: "Formación Ética y Profesional", name: "Gesticular", sigla: "GES", g10: "1-2", g11_12: "2-5" },
+      { type: "Demérito", category: "Formación Ética y Profesional", name: "Difamar", sigla: "DIF", g10: "6-11", g11_12: "6-11" },
+      { type: "Demérito", category: "Formación Ética y Profesional", name: "Entrar o salir de la EMCC por lugares no autorizados", sigla: "ESA", g10: "6-11", g11_12: "6-11" },
+      { type: "Demérito", category: "Formación Ética y Profesional", name: "Encubrir", sigla: "ENC", g10: "6-11", g11_12: "6-11" },
+
+      // MÉRITOS
+      { type: "Mérito", category: "Proceso Docente", name: "Obtener calificación de sobresaliente en preguntas de clase", sigla: "SCP", g10: "2", g11_12: "2" },
+      { type: "Mérito", category: "Proceso Docente", name: "Obtener calificación de sobresaliente en seminarios o trabajos prácticos", sigla: "SST", g10: "4", g11_12: "4" },
+      { type: "Mérito", category: "Proceso Docente", name: "Obtener calificación de sobresaliente en controles parciales", sigla: "SCP2", g10: "6", g11_12: "6" },
+      { type: "Mérito", category: "Proceso Docente", name: "Obtener calificación de sobresaliente en pruebas finales", sigla: "SPF", g10: "11", g11_12: "11" },
+      { type: "Mérito", category: "Proceso Docente", name: "Obtener calificación de sobresaliente en todas las comprobaciones de la semana", sigla: "SCS", g10: "2", g11_12: "2" },
+      { type: "Mérito", category: "Proceso Docente", name: "Destacarse en clase", sigla: "DCL", g10: "2", g11_12: "2" },
+      { type: "Mérito", category: "Actividades Científicas/Deportivas/Culturales", name: "Participar en evento", sigla: "PAR", g10: "1", g11_12: "1" },
+      { type: "Mérito", category: "Actividades Científicas/Deportivas/Culturales", name: "Obtener 3er lugar", sigla: "3L", g10: "3", g11_12: "3" },
+      { type: "Mérito", category: "Actividades Científicas/Deportivas/Culturales", name: "Obtener 2do lugar", sigla: "2L", g10: "4", g11_12: "4" },
+      { type: "Mérito", category: "Actividades Científicas/Deportivas/Culturales", name: "Obtener 1er lugar", sigla: "1L", g10: "5", g11_12: "5" },
+      { type: "Mérito", category: "Actividades Científicas/Deportivas/Culturales", name: "Obtener condición de destacado o relevante", sigla: "DRE", g10: "6", g11_12: "6" },
+      { type: "Mérito", category: "Actividades Científicas/Deportivas/Culturales", name: "Evento externo - Municipal", sigla: "EMUN", g10: "4", g11_12: "4" },
+      { type: "Mérito", category: "Actividades Científicas/Deportivas/Culturales", name: "Evento externo - Provincial", sigla: "EPRO", g10: "6", g11_12: "6" },
+      { type: "Mérito", category: "Actividades Científicas/Deportivas/Culturales", name: "Evento externo - Ejército", sigla: "EEJE", g10: "8", g11_12: "8" },
+      { type: "Mérito", category: "Actividades Científicas/Deportivas/Culturales", name: "Evento externo - Nacional", sigla: "ENAC", g10: "10", g11_12: "10" },
+      { type: "Mérito", category: "Rotación de Mando", name: "Jefe de escuadra", sigla: "JE", g10: "2", g11_12: "2" },
+      { type: "Mérito", category: "Rotación de Mando", name: "Jefe de pelotón", sigla: "JP", g10: "4", g11_12: "4" },
+      { type: "Mérito", category: "Rotación de Mando", name: "Segundo jefe de pelotón", sigla: "SJP", g10: "6", g11_12: "6" },
+      { type: "Mérito", category: "Rotación de Mando", name: "Jefe de compañía", sigla: "JCO", g10: "8", g11_12: "8" },
+      { type: "Mérito", category: "Rotación de Mando", name: "Jefe de batallón", sigla: "JB", g10: "10", g11_12: "10" },
+      { type: "Mérito", category: "Conducta", name: "Conducta sobresaliente en el semestre", sigla: "CSS", g10: "8", g11_12: "8" },
+      { type: "Mérito", category: "Vida Diaria", name: "Destacarse en cumplimiento de tarea", sigla: "DCT", g10: "1", g11_12: "1" },
+      { type: "Mérito", category: "Vida Diaria", name: "No tener reportes durante la semana", sigla: "NTR", g10: "2", g11_12: "2" },
+      { type: "Mérito", category: "Vida Diaria", name: "Destacarse en el Servicio de Guardia", sigla: "DSG", g10: "3-5", g11_12: "3-5" },
+      { type: "Mérito", category: "Vida Diaria", name: "Mantener porte y aspecto esmerado", sigla: "PAS", g10: "3", g11_12: "3" },
+      { type: "Mérito", category: "Vida Diaria", name: "Destacarse en el trabajo", sigla: "DTR", g10: "3-5", g11_12: "3-5" }
+    ];
+
+    const resultsContainer = document.getElementById("results");
+    const searchInput = document.getElementById("searchInput");
+
+    searchInput.addEventListener("input", performSearch);
+
+    function performSearch() {
+      const term = searchInput.value.trim().toLowerCase();
+      if (!term) {
+        resultsContainer.innerHTML = "<p>Escribe para buscar...</p>";
+        return;
+      }
+
+      const filtered = data.filter(item =>
+        item.name.toLowerCase().includes(term) ||
+        item.sigla.toLowerCase() === term
+      );
+
+      renderResults(filtered);
+    }
+
+    function showAll() {
+      renderResults(data);
+    }
+
+    function renderResults(list) {
+      if (list.length === 0) {
+        resultsContainer.innerHTML = "<p>No se encontraron resultados.</p>";
+        return;
+      }
+
+      let html = "";
+      let currentCategory = "";
+
+      list.forEach(item => {
+        if (item.category !== currentCategory) {
+          currentCategory = item.category;
+          html += `<div class="category">${item.type === "Demérito" ? "❌ Deméritos - " : "✅ Méritos - "}${item.category}</div>`;
+        }
+
+        html += `
+          <div class="item">
+            <h3>${item.name} <small>(${item.sigla})</small></h3>
+            <p><strong>10mo grado:</strong> ${item.g10} &nbsp; | &nbsp; <strong>11no–12mo:</strong> ${item.g11_12}</p>
+          </div>
+        `;
+      });
+
+      resultsContainer.innerHTML = html;
+    }
+
+    // Inicializar con mensaje
+    resultsContainer.innerHTML = "<p>Escribe para buscar o pulsa 'Ver todo'.</p>";
+  </script>
+</body>
+</html>
