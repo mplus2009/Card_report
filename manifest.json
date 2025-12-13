@@ -1,0 +1,12 @@
+{
+  "background_color": "#ffffff",
+  "dir": "ltr",
+  "display": "standalone",
+  "name": "Tabla de méritos EMCC",
+  "orientation": "any",
+  "scope": "/",
+  "short_name": "EMCC",
+  "start_url": "/",
+  "theme_color": "#ffffff",
+  "description": "La tabla de méritos y deméritos de las EMCC"
+}
