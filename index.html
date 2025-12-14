@@ -3,79 +3,139 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<link rel="icon" type="image" href="icon.PNG">
-
   <title>Méritos y Deméritos EMCC</title>
   <style>
+    :root{
+      /* Paleta escala verde militar */
+      --green-900: #0f2b18; /* muy oscuro */
+      --green-800: #174227;
+      --green-700: #2a5b35;
+      --green-600: #3f7a45;
+      --green-500: #5a9a5f;
+      --green-400: #81b883;
+      --muted-bg: #f3f6f2; /* leve tinte verde claro para el fondo */
+      --card-bg: #eef6ec; /* tarjeta con sutil tinte verde */
+      --accent: #cfe6d1; /* acento claro */
+      --text: #0b2414; /* texto principal oscuro */
+      --muted-text: #33513a;
+      --danger: #7a2b2b; /* rojo moderado para contraste si se necesita */
+    }
+
     * {
       box-sizing: border-box;
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     }
     body {
-      background-color: #65b098;
+      background-color: var(--muted-bg);
       margin: 0;
       padding: 16px;
-      color: #333;
+      color: var(--text);
     }
     h1 {
       text-align: center;
-      color: green;
+      color: var(--green-900);
       margin-bottom: 20px;
+      background: linear-gradient(90deg, rgba(21,49,28,0.06), rgba(95,154,95,0.02));
+      padding: 10px 12px;
+      border-radius: 10px;
+      display: inline-block;
+      width: 100%;
+      box-shadow: 0 1px 0 rgba(0,0,0,0.03) inset;
     }
     input[type="text"] {
       width: 100%;
       padding: 12px;
-      border: 1px solid #ccc;
-      border-radius: 80px;
+      border: 1px solid rgba(26,58,95,0.06);
+      border-radius: 8px;
       font-size: 16px;
       margin-bottom: 16px;
+      background: white;
+      color: var(--text);
+      box-shadow: 0 2px 4px rgba(16,43,24,0.03);
+    }
+    input[type="text"]::placeholder {
+      color: #6b8a6f;
     }
     button {
       width: 100%;
       padding: 12px;
-      background-color: green;
-      color: white;
+      background-color: var(--green-800);
+      color: #f7fff7;
       border: none;
-      border-radius: 80px;
+      border-radius: 8px;
       font-size: 16px;
       cursor: pointer;
       margin-bottom: 16px;
+      box-shadow: 0 4px 10px rgba(10,40,20,0.15);
+      transition: background-color 180ms ease, transform 120ms ease;
     }
     button:hover {
-      background-color: #2c5282;
+      background-color: var(--green-700);
+      transform: translateY(-1px);
     }
     .item {
-      background: white;
+      background: linear-gradient(180deg, white 0%, var(--card-bg) 100%);
       border-radius: 8px;
       padding: 12px;
       margin-bottom: 12px;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      box-shadow: 0 6px 16px rgba(8,22,12,0.06);
+      border-left: 6px solid rgba(46,86,45,0.12);
     }
     .item h3 {
       margin: 0 0 8px 0;
-      color: #2d3748;
+      color: var(--green-900);
+      font-size: 1.05rem;
+    }
+    .item h3 small {
+      color: var(--muted-text);
+      font-weight: 600;
+      margin-left: 6px;
+      font-size: 0.8rem;
     }
     .item p {
       margin: 4px 0;
-      color: #4a5568;
+      color: var(--muted-text);
     }
     .category {
-      font-weight: bold;
-      color: #1a3a5f;
+      font-weight: 700;
+      color: white;
       margin-top: 20px;
-      border-bottom: 1px solid #ddd;
-      padding-bottom: 4px;
+      border-radius: 8px;
+      padding: 10px 12px;
+      background: linear-gradient(90deg, var(--green-700), var(--green-500));
+      box-shadow: 0 3px 8px rgba(15,43,24,0.08);
     }
     #results {
       margin-top: 20px;
     }
+
+    /* Adaptaciones para contraste de Demérito/Mérito */
+    .category.dem {
+      background: linear-gradient(90deg, #6b2f2f, #9a4a4a); /* tono rojizo para deméritos (contraste) */
+    }
+    .category.mer {
+      background: linear-gradient(90deg, var(--green-700), var(--green-500));
+    }
+
+    /* Responsive */
+    @media (min-width: 600px) {
+      body {
+        padding: 28px;
+      }
+      .container {
+        max-width: 820px;
+        margin: 0 auto;
+      }
+    }
   </style>
 </head>
 <body>
-  <h1>🔍 Méritos y Deméritos EMCC</h1>
-  <input type="text" id="searchInput" placeholder="Buscar por nombre o siglas (ej: IO, AO, etc.)" />
-  <button onclick="showAll()">Ver todo</button>
-  <div id="results"></div>
+  <div class="container">
+    <h1>🔍 Méritos y Deméritos EMCC</h1>
+    <input type="text" id="searchInput" placeholder="Buscar por nombre o siglas (ej: IO, AO, etc.)" />
+    <button onclick="showAll()">Ver todo</button>
+    <div id="results"></div>
+  </div>
 
   <script>
     // Base de datos con faltas y méritos
@@ -186,7 +246,9 @@
       list.forEach(item => {
         if (item.category !== currentCategory) {
           currentCategory = item.category;
-          html += `<div class="category">${item.type === "Demérito" ? "❌ Deméritos - " : "✅ Méritos - "}${item.category}</div>`;
+          // añadir clase según tipo para diferenciar visualmente
+          const catClass = item.type === "Demérito" ? "category dem" : "category mer";
+          html += `<div class="${catClass}">${item.type === "Demérito" ? "❌ Deméritos - " : "✅ Méritos - "}${item.category}</div>`;
         }
 
         html += `
