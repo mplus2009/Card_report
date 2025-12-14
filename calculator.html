@@ -1,0 +1,779 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Discipline Calculator</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            padding: 40px;
+            max-width: 800px;
+            width: 100%;
+        }
+
+        h1 {
+            color: #333;
+            margin-bottom: 10px;
+            text-align: center;
+            font-size: 2.5em;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #666;
+            margin-bottom: 30px;
+            font-size: 0.95em;
+        }
+
+        .section {
+            margin-bottom: 30px;
+        }
+
+        .section-title {
+            font-size: 1.3em;
+            color: #667eea;
+            margin-bottom: 15px;
+            border-bottom: 2px solid #667eea;
+            padding-bottom: 10px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #333;
+            font-weight: 500;
+        }
+
+        input[type="number"],
+        input[type="text"],
+        select {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 1em;
+            transition: border-color 0.3s;
+        }
+
+        input[type="number"]:focus,
+        input[type="text"]:focus,
+        select:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        button {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 14px 30px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+            width: 100%;
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.4);
+        }
+
+        button:active {
+            transform: translateY(0);
+        }
+
+        .results-section {
+            background: #f8f9ff;
+            border-left: 4px solid #667eea;
+            padding: 20px;
+            border-radius: 8px;
+            margin-top: 30px;
+            display: none;
+        }
+
+        .results-section.show {
+            display: block;
+        }
+
+        .result-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 12px 0;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .result-item:last-child {
+            border-bottom: none;
+        }
+
+        .result-label {
+            font-weight: 600;
+            color: #333;
+        }
+
+        .result-value {
+            color: #667eea;
+            font-weight: 700;
+            font-size: 1.1em;
+        }
+
+        .summary-box {
+            background: white;
+            border: 2px solid #667eea;
+            padding: 20px;
+            border-radius: 8px;
+            margin-top: 20px;
+        }
+
+        .summary-title {
+            font-size: 1.2em;
+            color: #667eea;
+            margin-bottom: 15px;
+            font-weight: 600;
+        }
+
+        .recommendation {
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 15px;
+            font-weight: 500;
+        }
+
+        .recommendation.good {
+            background: #d4edda;
+            color: #155724;
+            border-left: 4px solid #28a745;
+        }
+
+        .recommendation.warning {
+            background: #fff3cd;
+            color: #856404;
+            border-left: 4px solid #ffc107;
+        }
+
+        .recommendation.critical {
+            background: #f8d7da;
+            color: #721c24;
+            border-left: 4px solid #dc3545;
+        }
+
+        .checkbox-group {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-top: 10px;
+        }
+
+        .checkbox-item {
+            display: flex;
+            align-items: center;
+        }
+
+        .checkbox-item input[type="checkbox"] {
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
+            margin-right: 10px;
+        }
+
+        .checkbox-item label {
+            margin: 0;
+            cursor: pointer;
+            font-weight: 400;
+        }
+
+        .reset-btn {
+            background: #6c757d;
+            margin-top: 10px;
+        }
+
+        .reset-btn:hover {
+            box-shadow: 0 10px 25px rgba(108, 117, 125, 0.4);
+        }
+
+        @media (max-width: 600px) {
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+
+            .checkbox-group {
+                grid-template-columns: 1fr;
+            }
+
+            h1 {
+                font-size: 1.8em;
+            }
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: #ddd;
+            border-radius: 4px;
+            overflow: hidden;
+            margin-top: 5px;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+            width: 0%;
+            transition: width 0.3s;
+        }
+
+        .chart-container {
+            margin-top: 20px;
+            padding: 20px;
+            background: white;
+            border-radius: 8px;
+        }
+
+        .chart-title {
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 15px;
+        }
+
+        .bar {
+            margin-bottom: 15px;
+        }
+
+        .bar-label {
+            font-weight: 500;
+            color: #666;
+            margin-bottom: 5px;
+            font-size: 0.9em;
+        }
+
+        .bar-bg {
+            width: 100%;
+            height: 25px;
+            background: #e9ecef;
+            border-radius: 5px;
+            overflow: hidden;
+        }
+
+        .bar-value {
+            height: 100%;
+            background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            padding-right: 10px;
+            color: white;
+            font-weight: 600;
+            font-size: 0.85em;
+            transition: width 0.3s;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>📊 Discipline Calculator</h1>
+        <p class="subtitle">Comprehensive Analysis Tool for Personal & Professional Development</p>
+
+        <form id="disciplineForm">
+            <!-- Personal Information Section -->
+            <div class="section">
+                <div class="section-title">Personal Information</div>
+                <div class="form-group">
+                    <label for="name">Name:</label>
+                    <input type="text" id="name" placeholder="Enter your name">
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="age">Age:</label>
+                        <input type="number" id="age" min="1" max="120" placeholder="Enter your age">
+                    </div>
+                    <div class="form-group">
+                        <label for="experience">Years of Experience:</label>
+                        <input type="number" id="experience" min="0" max="70" placeholder="Enter years">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Daily Habits Section -->
+            <div class="section">
+                <div class="section-title">Daily Habits & Routine</div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="wakeTime">Wake Up Time (hours):</label>
+                        <input type="number" id="wakeTime" min="0" max="24" step="0.5" value="6" placeholder="6">
+                    </div>
+                    <div class="form-group">
+                        <label for="sleepTime">Sleep Time (hours):</label>
+                        <input type="number" id="sleepTime" min="0" max="24" step="0.5" value="8" placeholder="8">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="exercise">Daily Exercise (minutes):</label>
+                        <input type="number" id="exercise" min="0" max="300" value="30" placeholder="30">
+                    </div>
+                    <div class="form-group">
+                        <label for="meditation">Daily Meditation (minutes):</label>
+                        <input type="number" id="meditation" min="0" max="120" value="10" placeholder="10">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Productivity Section -->
+            <div class="section">
+                <div class="section-title">Productivity Metrics</div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="focusHours">Focused Work Hours/Day:</label>
+                        <input type="number" id="focusHours" min="0" max="16" step="0.5" value="8" placeholder="8">
+                    </div>
+                    <div class="form-group">
+                        <label for="tasksCompleted">Tasks Completed/Week:</label>
+                        <input type="number" id="tasksCompleted" min="0" max="100" value="25" placeholder="25">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="procrastination">Procrastination Index (0-100):</label>
+                        <input type="number" id="procrastination" min="0" max="100" value="20" placeholder="20">
+                    </div>
+                    <div class="form-group">
+                        <label for="screenTime">Screen Time (hours/day):</label>
+                        <input type="number" id="screenTime" min="0" max="16" step="0.5" value="6" placeholder="6">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Goals & Targets Section -->
+            <div class="section">
+                <div class="section-title">Goals & Targets</div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="goalsSet">Goals Set This Year:</label>
+                        <input type="number" id="goalsSet" min="0" max="50" value="12" placeholder="12">
+                    </div>
+                    <div class="form-group">
+                        <label for="goalsAchieved">Goals Achieved:</label>
+                        <input type="number" id="goalsAchieved" min="0" max="50" value="8" placeholder="8">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="mainGoal">Primary Goal:</label>
+                    <input type="text" id="mainGoal" placeholder="Describe your main objective">
+                </div>
+            </div>
+
+            <!-- Financial Discipline Section -->
+            <div class="section">
+                <div class="section-title">Financial Discipline</div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="monthlyIncome">Monthly Income ($):</label>
+                        <input type="number" id="monthlyIncome" min="0" value="3000" placeholder="3000">
+                    </div>
+                    <div class="form-group">
+                        <label for="monthlySavings">Monthly Savings ($):</label>
+                        <input type="number" id="monthlySavings" min="0" value="600" placeholder="600">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="budget">Budget Adherence (%):</label>
+                        <input type="number" id="budget" min="0" max="100" value="85" placeholder="85">
+                    </div>
+                    <div class="form-group">
+                        <label for="debtPayoff">Debt Payoff Rate (monthly %):</label>
+                        <input type="number" id="debtPayoff" min="0" max="100" value="10" placeholder="10">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Health & Wellness Section -->
+            <div class="section">
+                <div class="section-title">Health & Wellness</div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="water">Water Intake (glasses/day):</label>
+                        <input type="number" id="water" min="0" max="20" value="8" placeholder="8">
+                    </div>
+                    <div class="form-group">
+                        <label for="nutrition">Nutrition Score (0-100):</label>
+                        <input type="number" id="nutrition" min="0" max="100" value="75" placeholder="75">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="stress">Stress Level (0-10):</label>
+                        <input type="number" id="stress" min="0" max="10" step="0.5" value="5" placeholder="5">
+                    </div>
+                    <div class="form-group">
+                        <label for="energyLevel">Energy Level (0-10):</label>
+                        <input type="number" id="energyLevel" min="0" max="10" step="0.5" value="7" placeholder="7">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Habits Checkboxes -->
+            <div class="section">
+                <div class="section-title">Positive Habits</div>
+                <div class="checkbox-group">
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="readingHabit" checked>
+                        <label for="readingHabit">Regular Reading</label>
+                    </div>
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="journaling" checked>
+                        <label for="journaling">Daily Journaling</label>
+                    </div>
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="networking">
+                        <label for="networking">Active Networking</label>
+                    </div>
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="learning">
+                        <label for="learning">Continuous Learning</label>
+                    </div>
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="planning" checked>
+                        <label for="planning">Weekly Planning</label>
+                    </div>
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="socialService">
+                        <label for="socialService">Community Service</label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Buttons -->
+            <div class="section">
+                <button type="submit">Calculate Discipline Score</button>
+                <button type="reset" class="reset-btn">Clear Form</button>
+            </div>
+        </form>
+
+        <!-- Results Section -->
+        <div class="results-section" id="results">
+            <h2 class="section-title">📈 Results & Analysis</h2>
+
+            <div class="summary-box">
+                <div class="summary-title">Overall Discipline Score</div>
+                <div class="result-item">
+                    <span class="result-label">Total Score:</span>
+                    <span class="result-value" id="totalScore">-</span>
+                </div>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progressFill" style="width: 0%"></div>
+                </div>
+                <div id="recommendation" class="recommendation"></div>
+            </div>
+
+            <div class="chart-container">
+                <div class="chart-title">Category Breakdown</div>
+                <div class="bar">
+                    <div class="bar-label">Daily Habits</div>
+                    <div class="bar-bg">
+                        <div class="bar-value" id="habitsBar" style="width: 0%">0%</div>
+                    </div>
+                </div>
+                <div class="bar">
+                    <div class="bar-label">Productivity</div>
+                    <div class="bar-bg">
+                        <div class="bar-value" id="productivityBar" style="width: 0%">0%</div>
+                    </div>
+                </div>
+                <div class="bar">
+                    <div class="bar-label">Goal Achievement</div>
+                    <div class="bar-bg">
+                        <div class="bar-value" id="goalsBar" style="width: 0%">0%</div>
+                    </div>
+                </div>
+                <div class="bar">
+                    <div class="bar-label">Financial Discipline</div>
+                    <div class="bar-bg">
+                        <div class="bar-value" id="financialBar" style="width: 0%">0%</div>
+                    </div>
+                </div>
+                <div class="bar">
+                    <div class="bar-label">Health & Wellness</div>
+                    <div class="bar-bg">
+                        <div class="bar-value" id="healthBar" style="width: 0%">0%</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="summary-box">
+                <div class="summary-title">Detailed Metrics</div>
+                <div class="result-item">
+                    <span class="result-label">Sleep Quality Score:</span>
+                    <span class="result-value" id="sleepScore">-</span>
+                </div>
+                <div class="result-item">
+                    <span class="result-label">Exercise Consistency:</span>
+                    <span class="result-value" id="exerciseScore">-</span>
+                </div>
+                <div class="result-item">
+                    <span class="result-label">Focus & Productivity:</span>
+                    <span class="result-value" id="focusScore">-</span>
+                </div>
+                <div class="result-item">
+                    <span class="result-label">Goal Achievement Rate:</span>
+                    <span class="result-value" id="achievementRate">-</span>
+                </div>
+                <div class="result-item">
+                    <span class="result-label">Savings Rate:</span>
+                    <span class="result-value" id="savingsRate">-</span>
+                </div>
+                <div class="result-item">
+                    <span class="result-label">Health Score:</span>
+                    <span class="result-value" id="healthScore">-</span>
+                </div>
+                <div class="result-item">
+                    <span class="result-label">Positive Habits Count:</span>
+                    <span class="result-value" id="habitsCount">-</span>
+                </div>
+            </div>
+
+            <div class="summary-box">
+                <div class="summary-title">Key Insights & Recommendations</div>
+                <div id="insights"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const form = document.getElementById('disciplineForm');
+        const resultsSection = document.getElementById('results');
+
+        form.addEventListener('submit', function(e) {
+            e.preventDefault();
+            calculateDisciplineScore();
+        });
+
+        function calculateDisciplineScore() {
+            // Get all input values
+            const name = document.getElementById('name').value || 'User';
+            const age = parseFloat(document.getElementById('age').value) || 30;
+            const wakeTime = parseFloat(document.getElementById('wakeTime').value) || 6;
+            const sleepTime = parseFloat(document.getElementById('sleepTime').value) || 8;
+            const exercise = parseFloat(document.getElementById('exercise').value) || 30;
+            const meditation = parseFloat(document.getElementById('meditation').value) || 10;
+            const focusHours = parseFloat(document.getElementById('focusHours').value) || 8;
+            const tasksCompleted = parseFloat(document.getElementById('tasksCompleted').value) || 25;
+            const procrastination = parseFloat(document.getElementById('procrastination').value) || 20;
+            const screenTime = parseFloat(document.getElementById('screenTime').value) || 6;
+            const goalsSet = parseFloat(document.getElementById('goalsSet').value) || 12;
+            const goalsAchieved = parseFloat(document.getElementById('goalsAchieved').value) || 8;
+            const mainGoal = document.getElementById('mainGoal').value || 'Personal Growth';
+            const monthlyIncome = parseFloat(document.getElementById('monthlyIncome').value) || 3000;
+            const monthlySavings = parseFloat(document.getElementById('monthlySavings').value) || 600;
+            const budget = parseFloat(document.getElementById('budget').value) || 85;
+            const debtPayoff = parseFloat(document.getElementById('debtPayoff').value) || 10;
+            const water = parseFloat(document.getElementById('water').value) || 8;
+            const nutrition = parseFloat(document.getElementById('nutrition').value) || 75;
+            const stress = parseFloat(document.getElementById('stress').value) || 5;
+            const energyLevel = parseFloat(document.getElementById('energyLevel').value) || 7;
+
+            // Calculate individual scores
+            const sleepScore = calculateSleepScore(sleepTime);
+            const exerciseScore = calculateExerciseScore(exercise);
+            const meditationScore = calculateMeditationScore(meditation);
+            const dailyHabitsScore = (sleepScore + exerciseScore + meditationScore) / 3;
+
+            const procrastinationScore = Math.max(0, 100 - procrastination);
+            const focusScore = Math.min(100, (focusHours / 8) * 100);
+            const tasksScore = Math.min(100, (tasksCompleted / 30) * 100);
+            const screenScore = Math.max(0, 100 - (screenTime / 16) * 100);
+            const productivityScore = (procrastinationScore + focusScore + tasksScore + screenScore) / 4;
+
+            const achievementRate = goalsSet > 0 ? (goalsAchieved / goalsSet) * 100 : 0;
+            const goalsScore = Math.min(100, achievementRate * 1.2);
+
+            const savingsRate = monthlyIncome > 0 ? (monthlySavings / monthlyIncome) * 100 : 0;
+            const financialScore = (budget + debtPayoff + Math.min(100, savingsRate)) / 3;
+
+            const waterScore = Math.min(100, (water / 8) * 100);
+            const stressScore = (10 - stress) * 10;
+            const energyScore = energyLevel * 10;
+            const healthScore = (waterScore + nutrition + stressScore + energyScore) / 4;
+
+            // Count positive habits
+            const habits = [
+                document.getElementById('readingHabit').checked,
+                document.getElementById('journaling').checked,
+                document.getElementById('networking').checked,
+                document.getElementById('learning').checked,
+                document.getElementById('planning').checked,
+                document.getElementById('socialService').checked
+            ];
+            const habitsCount = habits.filter(h => h).length;
+            const habitsBonus = (habitsCount / 6) * 15;
+
+            // Calculate total score
+            const totalScore = Math.round(
+                (dailyHabitsScore * 0.2 +
+                productivityScore * 0.25 +
+                goalsScore * 0.2 +
+                financialScore * 0.15 +
+                healthScore * 0.2) + habitsBonus
+            );
+
+            // Update UI with results
+            document.getElementById('totalScore').textContent = totalScore + '/100';
+            document.getElementById('progressFill').style.width = totalScore + '%';
+            document.getElementById('sleepScore').textContent = Math.round(sleepScore) + '/100';
+            document.getElementById('exerciseScore').textContent = Math.round(exerciseScore) + '/100';
+            document.getElementById('focusScore').textContent = Math.round(focusScore) + '/100';
+            document.getElementById('achievementRate').textContent = Math.round(achievementRate) + '%';
+            document.getElementById('savingsRate').textContent = Math.round(savingsRate) + '%';
+            document.getElementById('healthScore').textContent = Math.round(healthScore) + '/100';
+            document.getElementById('habitsCount').textContent = habitsCount + '/6';
+
+            // Update bar charts
+            updateBar('habitsBar', Math.round(dailyHabitsScore));
+            updateBar('productivityBar', Math.round(productivityScore));
+            updateBar('goalsBar', Math.round(goalsScore));
+            updateBar('financialBar', Math.round(financialScore));
+            updateBar('healthBar', Math.round(healthScore));
+
+            // Generate recommendation
+            const recommendation = getRecommendation(totalScore);
+            const recElement = document.getElementById('recommendation');
+            recElement.textContent = recommendation.text;
+            recElement.className = 'recommendation ' + recommendation.class;
+
+            // Generate insights
+            generateInsights(totalScore, dailyHabitsScore, productivityScore, goalsScore, financialScore, healthScore);
+
+            // Show results
+            resultsSection.classList.add('show');
+            resultsSection.scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function calculateSleepScore(hours) {
+            const optimal = 8;
+            const diff = Math.abs(hours - optimal);
+            return Math.max(0, 100 - (diff * 5));
+        }
+
+        function calculateExerciseScore(minutes) {
+            const recommended = 30;
+            if (minutes >= recommended) {
+                return Math.min(100, 60 + (minutes / 60) * 40);
+            }
+            return (minutes / recommended) * 60;
+        }
+
+        function calculateMeditationScore(minutes) {
+            return Math.min(100, (minutes / 20) * 100);
+        }
+
+        function updateBar(elementId, value) {
+            const bar = document.getElementById(elementId);
+            bar.style.width = value + '%';
+            bar.textContent = value + '%';
+        }
+
+        function getRecommendation(score) {
+            if (score >= 85) {
+                return {
+                    text: '🌟 Exceptional! You demonstrate outstanding discipline across all areas. Keep maintaining these excellent habits!',
+                    class: 'good'
+                };
+            } else if (score >= 70) {
+                return {
+                    text: '✅ Good! You have solid discipline. Focus on the areas below 70 to improve further.',
+                    class: 'good'
+                };
+            } else if (score >= 50) {
+                return {
+                    text: '⚠️ Fair. You have room for improvement. Consider prioritizing habits in lower-scoring categories.',
+                    class: 'warning'
+                };
+            } else {
+                return {
+                    text: '🔴 Needs Work. Start with small, consistent improvements in your daily habits and productivity.',
+                    class: 'critical'
+                };
+            }
+        }
+
+        function generateInsights(total, habits, productivity, goals, financial, health) {
+            const insights = [];
+
+            if (habits >= 80) {
+                insights.push('✓ Your daily habits are excellent. Keep up the consistent routine!');
+            } else if (habits < 50) {
+                insights.push('→ Focus on improving sleep, exercise, and meditation routines.');
+            }
+
+            if (productivity >= 80) {
+                insights.push('✓ Outstanding productivity levels. Your focus and task completion are impressive!');
+            } else if (productivity < 50) {
+                insights.push('→ Reduce screen time and procrastination to boost productivity.');
+            }
+
+            if (goals >= 80) {
+                insights.push('✓ Excellent goal achievement rate. You\'re successfully reaching your targets!');
+            } else if (goals < 50) {
+                insights.push('→ Set more specific goals and break them into smaller milestones.');
+            }
+
+            if (financial >= 80) {
+                insights.push('✓ Strong financial discipline. Your savings and budget management are commendable!');
+            } else if (financial < 50) {
+                insights.push('→ Create a detailed budget and increase your monthly savings target.');
+            }
+
+            if (health >= 80) {
+                insights.push('✓ Excellent health habits. Your wellness metrics are outstanding!');
+            } else if (health < 50) {
+                insights.push('→ Increase water intake, improve nutrition, and manage stress levels.');
+            }
+
+            if (total >= 80) {
+                insights.push('🎯 Overall: You\'re a highly disciplined individual. Inspire others with your example!');
+            } else if (total >= 60) {
+                insights.push('🎯 Overall: You\'re on the right track. Consistency will lead to excellence.');
+            } else {
+                insights.push('🎯 Overall: Start with one area at a time. Small improvements compound over time.');
+            }
+
+            const insightsHtml = insights.map(insight => 
+                '<div style="padding: 10px 0; color: #333; border-bottom: 1px solid #eee; font-size: 0.95em;">' + insight + '</div>'
+            ).join('');
+
+            document.getElementById('insights').innerHTML = insightsHtml;
+        }
+    </script>
+</body>
+</html>
