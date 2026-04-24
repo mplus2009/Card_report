@@ -1,0 +1,725 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema de Gestión Militar - FAR</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="manifest" href="manifest.json">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="header-content">
+            <div class="logo-section">
+                <div class="emblem">
+                    <svg viewBox="0 0 100 100" class="emblem-svg">
+                        <circle cx="50" cy="50" r="45" fill="#c41e3a" stroke="#2d5016" stroke-width="3"/>
+                        <circle cx="50" cy="50" r="40" fill="none" stroke="#ffd700" stroke-width="2"/>
+                        <text x="50" y="35" text-anchor="middle" fill="#ffd700" font-size="12" font-weight="bold">FAR</text>
+                        <text x="50" y="55" text-anchor="middle" fill="#ffffff" font-size="8">Fuerzas Armadas</text>
+                        <text x="50" y="65" text-anchor="middle" fill="#ffffff" font-size="8">Revolucionarias</text>
+                        <polygon points="50,70 45,85 50,82 55,85" fill="#ffd700"/>
+                    </svg>
+                </div>
+                <div class="title-section">
+                    <h1>Ministerio de las Fuerzas Armadas Revolucionarias</h1>
+                    <h2>República de Cuba</h2>
+                    <p class="motto">"Siempre Listos para la Defensa de la Patria"</p>
+                </div>
+            </div>
+            <div class="user-info">
+                <span class="rank">Capitán</span>
+                <span class="name">Juan Pérez Rodríguez</span>
+                <button class="logout-btn" onclick="logout()">Cerrar Sesión</button>
+            </div>
+        </div>
+        <nav class="main-nav">
+            <ul>
+                <li><a href="#inicio" class="nav-link active">Inicio</a></li>
+                <li><a href="#personal" class="nav-link">Personal</a></li>
+                <li><a href="#operaciones" class="nav-link">Operaciones</a></li>
+                <li><a href="#equipamiento" class="nav-link">Equipamiento</a></li>
+                <li><a href="#entrenamiento" class="nav-link">Entrenamiento</a></li>
+                <li><a href="#comunicaciones" class="nav-link">Comunicaciones</a></li>
+                <li><a href="#reportes" class="nav-link">Reportes</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Dashboard Section -->
+        <section id="inicio" class="section active">
+            <div class="section-header">
+                <h2>Panel de Control</h2>
+                <div class="date-time">
+                    <span id="current-date"></span>
+                    <span id="current-time"></span>
+                </div>
+            </div>
+
+            <div class="dashboard-grid">
+                <div class="stat-card">
+                    <div class="stat-icon">👥</div>
+                    <div class="stat-info">
+                        <h3>Personal Activo</h3>
+                        <p class="stat-number">2,847</p>
+                        <p class="stat-change positive">+12 esta semana</p>
+                    </div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-icon">🚁</div>
+                    <div class="stat-info">
+                        <h3>Unidades Operativas</h3>
+                        <p class="stat-number">156</p>
+                        <p class="stat-change neutral">Estable</p>
+                    </div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-icon">📋</div>
+                    <div class="stat-info">
+                        <h3>Operaciones en Curso</h3>
+                        <p class="stat-number">23</p>
+                        <p class="stat-change positive">+5 hoy</p>
+                    </div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-icon">⚠️</div>
+                    <div class="stat-info">
+                        <h3>Alertas Activas</h3>
+                        <p class="stat-number">3</p>
+                        <p class="stat-change negative">Requieren atención</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="content-grid">
+                <div class="card">
+                    <div class="card-header">
+                        <h3>Últimas Órdenes</h3>
+                        <button class="btn-primary">Nueva Orden</button>
+                    </div>
+                    <div class="card-body">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Tipo</th>
+                                    <th>Prioridad</th>
+                                    <th>Fecha</th>
+                                    <th>Estado</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>ORD-2024-001</td>
+                                    <td>Patrulla Fronteriza</td>
+                                    <td><span class="priority-high">Alta</span></td>
+                                    <td>24/01/2025</td>
+                                    <td><span class="status-active">En Ejecución</span></td>
+                                </tr>
+                                <tr>
+                                    <td>ORD-2024-002</td>
+                                    <td>Entrenamiento Táctico</td>
+                                    <td><span class="priority-medium">Media</span></td>
+                                    <td>23/01/2025</td>
+                                    <td><span class="status-pending">Pendiente</span></td>
+                                </tr>
+                                <tr>
+                                    <td>ORD-2024-003</td>
+                                    <td>Mantenimiento Equipo</td>
+                                    <td><span class="priority-low">Baja</span></td>
+                                    <td>22/01/2025</td>
+                                    <td><span class="status-completed">Completada</span></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <h3>Notificaciones Importantes</h3>
+                    </div>
+                    <div class="card-body">
+                        <div class="notification-list">
+                            <div class="notification urgent">
+                                <span class="notif-icon">🔴</span>
+                                <div class="notif-content">
+                                    <strong>Actualización de Protocolo de Seguridad</strong>
+                                    <p>Nuevo protocolo efectivo desde el 01/02/2025</p>
+                                </div>
+                                <span class="notif-time">Hace 2 horas</span>
+                            </div>
+                            <div class="notification warning">
+                                <span class="notif-icon">🟡</span>
+                                <div class="notif-content">
+                                    <strong>Mantenimiento Programado del Sistema</strong>
+                                    <p>El sistema estará offline el 28/01 de 02:00 a 04:00</p>
+                                </div>
+                                <span class="notif-time">Hace 5 horas</span>
+                            </div>
+                            <div class="notification info">
+                                <span class="notif-icon">🔵</span>
+                                <div class="notif-content">
+                                    <strong>Nueva Directiva del MINFAR</strong>
+                                    <p>Directiva No. 15/2025 sobre procedimientos operativos</p>
+                                </div>
+                                <span class="notif-time">Ayer</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Personal Section -->
+        <section id="personal" class="section">
+            <div class="section-header">
+                <h2>Gestión de Personal</h2>
+                <button class="btn-primary">Registrar Nuevo Personal</button>
+            </div>
+
+            <div class="filters-bar">
+                <input type="text" class="search-input" placeholder="Buscar por nombre, grado o unidad...">
+                <select class="filter-select">
+                    <option value="">Todos los Grados</option>
+                    <option value="general">General</option>
+                    <option value="coronel">Coronel</option>
+                    <option value="capitan">Capitán</option>
+                    <option value="teniente">Teniente</option>
+                    <option value="suboficial">Suboficial</option>
+                    <option value="tropa">Tropa</option>
+                </select>
+                <select class="filter-select">
+                    <option value="">Todas las Unidades</option>
+                    <option value="ejercito">Ejército</option>
+                    <option value="defensa_aerea">Defensa Antiaérea</option>
+                    <option value="fuerza_aerea">Fuerza Aérea</option>
+                    <option value="marina">Marina de Guerra</option>
+                    <option value="tropas_especiales">Tropas Especiales</option>
+                </select>
+            </div>
+
+            <div class="card">
+                <div class="card-body">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>No. Carnet</th>
+                                <th>Nombre Completo</th>
+                                <th>Grado</th>
+                                <th>Unidad</th>
+                                <th>Estado</th>
+                                <th>Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>FAR-2024-0001</td>
+                                <td>García Martínez, Carlos</td>
+                                <td>Coronel</td>
+                                <td>Ejército Occidental</td>
+                                <td><span class="status-active">Activo</span></td>
+                                <td>
+                                    <button class="btn-small">Ver</button>
+                                    <button class="btn-small">Editar</button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>FAR-2024-0002</td>
+                                <td>Rodríguez López, María</td>
+                                <td>Capitán</td>
+                                <td>Defensa Antiaérea</td>
+                                <td><span class="status-active">Activo</span></td>
+                                <td>
+                                    <button class="btn-small">Ver</button>
+                                    <button class="btn-small">Editar</button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>FAR-2024-0003</td>
+                                <td>Hernández Silva, José</td>
+                                <td>Teniente</td>
+                                <td>Fuerza Aérea</td>
+                                <td><span class="status-deployed">Desplegado</span></td>
+                                <td>
+                                    <button class="btn-small">Ver</button>
+                                    <button class="btn-small">Editar</button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- Operaciones Section -->
+        <section id="operaciones" class="section">
+            <div class="section-header">
+                <h2>Centro de Operaciones</h2>
+                <button class="btn-primary">Nueva Operación</button>
+            </div>
+
+            <div class="operations-map">
+                <div class="map-placeholder">
+                    <svg viewBox="0 0 800 400" class="map-svg">
+                        <rect width="800" height="400" fill="#1a3a5c"/>
+                        <ellipse cx="400" cy="200" rx="350" ry="150" fill="#2d5016" opacity="0.3"/>
+                        <circle cx="200" cy="150" r="10" fill="#c41e3a"/>
+                        <circle cx="400" cy="200" r="10" fill="#ffd700"/>
+                        <circle cx="600" cy="180" r="10" fill="#4CAF50"/>
+                        <circle cx="300" cy="250" r="10" fill="#2196F3"/>
+                        <text x="200" y="140" fill="#ffffff" font-size="12" text-anchor="middle">Base Occidental</text>
+                        <text x="400" y="190" fill="#ffffff" font-size="12" text-anchor="middle">Comando Central</text>
+                        <text x="600" y="170" fill="#ffffff" font-size="12" text-anchor="middle">Base Oriental</text>
+                        <text x="300" y="270" fill="#ffffff" font-size="12" text-anchor="middle">Zona Naval</text>
+                        <path d="M 200 150 L 400 200 L 600 180" stroke="#ffffff" stroke-width="2" fill="none" stroke-dasharray="5,5"/>
+                    </svg>
+                    <div class="map-legend">
+                        <div class="legend-item"><span class="legend-color" style="background: #c41e3a;"></span> Base Militar</div>
+                        <div class="legend-item"><span class="legend-color" style="background: #ffd700;"></span> Comando</div>
+                        <div class="legend-item"><span class="legend-color" style="background: #4CAF50;"></span> Unidad Terrestre</div>
+                        <div class="legend-item"><span class="legend-color" style="background: #2196F3;"></span> Unidad Naval</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="content-grid">
+                <div class="card full-width">
+                    <div class="card-header">
+                        <h3>Operaciones Activas</h3>
+                    </div>
+                    <div class="card-body">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>Código</th>
+                                    <th>Nombre</th>
+                                    <th>Tipo</th>
+                                    <th>Comandante</th>
+                                    <th>Inicio</th>
+                                    <th>Estado</th>
+                                    <th>Progreso</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>OP-2025-001</td>
+                                    <td>Escudo Norte</td>
+                                    <td>Vigilancia Fronteriza</td>
+                                    <td>Coronel García</td>
+                                    <td>20/01/2025</td>
+                                    <td><span class="status-active">En Curso</span></td>
+                                    <td>
+                                        <div class="progress-bar">
+                                            <div class="progress-fill" style="width: 75%;"></div>
+                                        </div>
+                                        <span>75%</span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>OP-2025-002</td>
+                                    <td>Martillo del Sur</td>
+                                    <td>Entrenamiento Conjunto</td>
+                                    <td>Capitán Rodríguez</td>
+                                    <td>22/01/2025</td>
+                                    <td><span class="status-active">En Curso</span></td>
+                                    <td>
+                                        <div class="progress-bar">
+                                            <div class="progress-fill" style="width: 45%;"></div>
+                                        </div>
+                                        <span>45%</span>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Equipamiento Section -->
+        <section id="equipamiento" class="section">
+            <div class="section-header">
+                <h2>Gestión de Equipamiento</h2>
+                <button class="btn-primary">Registrar Equipo</button>
+            </div>
+
+            <div class="dashboard-grid">
+                <div class="stat-card">
+                    <div class="stat-icon">🔫</div>
+                    <div class="stat-info">
+                        <h3>Armamento</h3>
+                        <p class="stat-number">1,245</p>
+                        <p class="stat-detail">85% Operativo</p>
+                    </div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-icon">🚗</div>
+                    <div class="stat-info">
+                        <h3>Vehículos</h3>
+                        <p class="stat-number">342</p>
+                        <p class="stat-detail">92% Operativo</p>
+                    </div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-icon">📻</div>
+                    <div class="stat-info">
+                        <h3>Equipos de Comunicación</h3>
+                        <p class="stat-number">567</p>
+                        <p class="stat-detail">95% Operativo</p>
+                    </div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-icon">🛡️</div>
+                    <div class="stat-info">
+                        <h3>Equipo de Protección</h3>
+                        <p class="stat-number">2,890</p>
+                        <p class="stat-detail">98% Operativo</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <h3>Inventario de Equipamiento Principal</h3>
+                </div>
+                <div class="card-body">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Código</th>
+                                <th>Descripción</th>
+                                <th>Categoría</th>
+                                <th>Cantidad</th>
+                                <th>Estado</th>
+                                <th>Ubicación</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>ARM-001</td>
+                                <td>Fusil de Asalto AK-103</td>
+                                <td>Armamento Individual</td>
+                                <td>850</td>
+                                <td><span class="status-good">Bueno</span></td>
+                                <td>Almacén Central</td>
+                            </tr>
+                            <tr>
+                                <td>VEH-001</td>
+                                <td>Camión Táctico URAL-4320</td>
+                                <td>Vehículos de Transporte</td>
+                                <td>45</td>
+                                <td><span class="status-good">Bueno</span></td>
+                                <td>Base Occidental</td>
+                            </tr>
+                            <tr>
+                                <td>COM-001</td>
+                                <td>Radio Táctica PRC-150</td>
+                                <td>Comunicaciones</td>
+                                <td>230</td>
+                                <td><span class="status-excellent">Excelente</span></td>
+                                <td>Varios</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- Entrenamiento Section -->
+        <section id="entrenamiento" class="section">
+            <div class="section-header">
+                <h2>Programas de Entrenamiento</h2>
+                <button class="btn-primary">Nuevo Programa</button>
+            </div>
+
+            <div class="content-grid">
+                <div class="card">
+                    <div class="card-header">
+                        <h3>Programas Activos</h3>
+                    </div>
+                    <div class="card-body">
+                        <div class="training-program">
+                            <div class="program-header">
+                                <h4>Curso de Liderazgo Táctico</h4>
+                                <span class="program-status active">Activo</span>
+                            </div>
+                            <div class="program-details">
+                                <p><strong>Duración:</strong> 4 semanas</p>
+                                <p><strong>Participantes:</strong> 24 oficiales</p>
+                                <p><strong>Instructor:</strong> Coronel Martínez</p>
+                                <p><strong>Progreso:</strong></p>
+                                <div class="progress-bar">
+                                    <div class="progress-fill" style="width: 60%;"></div>
+                                </div>
+                                <p>60% completado</p>
+                            </div>
+                        </div>
+
+                        <div class="training-program">
+                            <div class="program-header">
+                                <h4>Entrenamiento de Combate Urbano</h4>
+                                <span class="program-status active">Activo</span>
+                            </div>
+                            <div class="program-details">
+                                <p><strong>Duración:</strong> 2 semanas</p>
+                                <p><strong>Participantes:</strong> 45 efectivos</p>
+                                <p><strong>Instructor:</strong> Capitán Hernández</p>
+                                <p><strong>Progreso:</strong></p>
+                                <div class="progress-bar">
+                                    <div class="progress-fill" style="width: 30%;"></div>
+                                </div>
+                                <p>30% completado</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <h3>Próximos Programas</h3>
+                    </div>
+                    <div class="card-body">
+                        <div class="upcoming-training">
+                            <div class="training-date">
+                                <span class="day">05</span>
+                                <span class="month">FEB</span>
+                            </div>
+                            <div class="training-info">
+                                <h4>Curso de Primeros Auxilios en Combate</h4>
+                                <p>30 plazas disponibles</p>
+                            </div>
+                        </div>
+
+                        <div class="upcoming-training">
+                            <div class="training-date">
+                                <span class="day">12</span>
+                                <span class="month">FEB</span>
+                            </div>
+                            <div class="training-info">
+                                <h4>Entrenamiento de Comunicaciones Encriptadas</h4>
+                                <p>15 plazas disponibles</p>
+                            </div>
+                        </div>
+
+                        <div class="upcoming-training">
+                            <div class="training-date">
+                                <span class="day">20</span>
+                                <span class="month">FEB</span>
+                            </div>
+                            <div class="training-info">
+                                <h4>Simulacro de Defensa Aérea</h4>
+                                <p>Toda la unidad</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Comunicaciones Section -->
+        <section id="comunicaciones" class="section">
+            <div class="section-header">
+                <h2>Sistema de Comunicaciones</h2>
+            </div>
+
+            <div class="content-grid">
+                <div class="card">
+                    <div class="card-header">
+                        <h3>Enviar Mensaje Seguro</h3>
+                    </div>
+                    <div class="card-body">
+                        <form class="message-form">
+                            <div class="form-group">
+                                <label for="recipient">Destinatario:</label>
+                                <select id="recipient" class="form-control">
+                                    <option value="">Seleccionar destinatario...</option>
+                                    <option value="comando">Comando Central</option>
+                                    <option value="base_occidental">Base Occidental</option>
+                                    <option value="base_oriental">Base Oriental</option>
+                                    <option value="zona_naval">Zona Naval</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="priority">Prioridad:</label>
+                                <select id="priority" class="form-control">
+                                    <option value="normal">Normal</option>
+                                    <option value="importante">Importante</option>
+                                    <option value="urgente">Urgente</option>
+                                    <option value="critico">Crítico</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="subject">Asunto:</label>
+                                <input type="text" id="subject" class="form-control" placeholder="Asunto del mensaje">
+                            </div>
+                            <div class="form-group">
+                                <label for="message">Mensaje:</label>
+                                <textarea id="message" class="form-control" rows="5" placeholder="Escriba su mensaje seguro aquí..."></textarea>
+                            </div>
+                            <button type="submit" class="btn-primary">Enviar Mensaje Encriptado</button>
+                        </form>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <h3>Buzón de Entrada</h3>
+                    </div>
+                    <div class="card-body">
+                        <div class="message-list">
+                            <div class="message-item unread">
+                                <span class="message-priority critical">CRÍTICO</span>
+                                <div class="message-content">
+                                    <strong>De: Comando Central</strong>
+                                    <p>Actualización inmediata de protocolos de seguridad</p>
+                                    <span class="message-time">10:30 - Hoy</span>
+                                </div>
+                            </div>
+                            <div class="message-item unread">
+                                <span class="message-priority important">IMPORTANTE</span>
+                                <div class="message-content">
+                                    <strong>De: Base Occidental</strong>
+                                    <p>Reporte de patrulla fronteriza - Sector 7</p>
+                                    <span class="message-time">09:15 - Hoy</span>
+                                </div>
+                            </div>
+                            <div class="message-item">
+                                <span class="message-priority normal">NORMAL</span>
+                                <div class="message-content">
+                                    <strong>De: Zona Naval</strong>
+                                    <p>Programación de mantenimiento de embarcaciones</p>
+                                    <span class="message-time">16:45 - Ayer</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Reportes Section -->
+        <section id="reportes" class="section">
+            <div class="section-header">
+                <h2>Generación de Reportes</h2>
+            </div>
+
+            <div class="content-grid">
+                <div class="card">
+                    <div class="card-header">
+                        <h3>Tipos de Reporte</h3>
+                    </div>
+                    <div class="card-body">
+                        <div class="report-types">
+                            <div class="report-type">
+                                <div class="report-icon">📊</div>
+                                <h4>Reporte de Personal</h4>
+                                <p>Estado nominal, despliegues, licencias</p>
+                                <button class="btn-secondary">Generar</button>
+                            </div>
+                            <div class="report-type">
+                                <div class="report-icon">🎯</div>
+                                <h4>Reporte Operacional</h4>
+                                <p>Operaciones en curso, resultados, estadísticas</p>
+                                <button class="btn-secondary">Generar</button>
+                            </div>
+                            <div class="report-type">
+                                <div class="report-icon">📦</div>
+                                <h4>Reporte de Equipamiento</h4>
+                                <p>Inventario, estado, mantenimiento</p>
+                                <button class="btn-secondary">Generar</button>
+                            </div>
+                            <div class="report-type">
+                                <div class="report-icon">📈</div>
+                                <h4>Reporte de Entrenamiento</h4>
+                                <p>Programas completados, calificaciones</p>
+                                <button class="btn-secondary">Generar</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <h3>Reportes Recientes</h3>
+                    </div>
+                    <div class="card-body">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>Nombre</th>
+                                    <th>Tipo</th>
+                                    <th>Fecha</th>
+                                    <th>Estado</th>
+                                    <th>Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Reporte_Mensual_Enero_2025.pdf</td>
+                                    <td>Personal</td>
+                                    <td>24/01/2025</td>
+                                    <td><span class="status-completed">Generado</span></td>
+                                    <td>
+                                        <button class="btn-small">Descargar</button>
+                                        <button class="btn-small">Imprimir</button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>Operaciones_Semana_3.xlsx</td>
+                                    <td>Operacional</td>
+                                    <td>23/01/2025</td>
+                                    <td><span class="status-completed">Generado</span></td>
+                                    <td>
+                                        <button class="btn-small">Descargar</button>
+                                        <button class="btn-small">Imprimir</button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>Inventario_Armamento.pdf</td>
+                                    <td>Equipamiento</td>
+                                    <td>22/01/2025</td>
+                                    <td><span class="status-completed">Generado</span></td>
+                                    <td>
+                                        <button class="btn-small">Descargar</button>
+                                        <button class="btn-small">Imprimir</button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-section">
+                <h4>Ministerio de las FAR</h4>
+                <p>La Habana, Cuba</p>
+            </div>
+            <div class="footer-section">
+                <p>© 2025 - Sistema de Gestión Militar</p>
+                <p>Versión 2.5.1</p>
+            </div>
+            <div class="footer-section">
+                <p>Clasificación: <span class="classification">CONFIDENCIAL</span></p>
+                <p>Acceso Restringido - Personal Autorizado</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="app.js"></script>
+</body>
+</html>
